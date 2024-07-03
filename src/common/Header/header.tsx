@@ -6,14 +6,14 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { rootSlice } from "../../redux/slices/root.slice";
 
-const Nav = ({routes}:{routes: { name: string, link: string }[]}) => {
+const Nav = ({ routes }: { routes: { name: string; link: string }[] }) => {
   let [open, setOpen] = useState(false);
-  const {isLogin} = useAppSelector(state=>state.rootState)
-  const dispatch = useAppDispatch()
+  const { isLogin } = useAppSelector((state) => state.rootState);
+  const dispatch = useAppDispatch();
 
-  const logout=()=>{
-    dispatch(rootSlice.actions.logout())
-  }
+  const logout = () => {
+    dispatch(rootSlice.actions.logout());
+  };
   return (
     <div className="shadow-md w-full fixed top-0 left-0 z-50">
       <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
@@ -21,10 +21,12 @@ const Nav = ({routes}:{routes: { name: string, link: string }[]}) => {
           className="font-bold text-2xl cursor-pointer flex items-center font-[Poppins] 
       text-gray-800"
         >
-          <span className="text-3xl text-indigo-600 mr-1 ">
-            <IoLogoIonic />
-          </span>
-          Movies
+          <Link to="/" className="flex">
+            <span className="text-3xl text-indigo-600 mr-1 ">
+              <IoLogoIonic />
+            </span>
+            Movies
+          </Link>
         </div>
 
         <div
@@ -49,21 +51,25 @@ const Nav = ({routes}:{routes: { name: string, link: string }[]}) => {
               </Link>
             </li>
           ))}
-          {!isLogin ? <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link
-              to={"/login"}
-              className="text-gray-800 hover:text-gray-400 duration-500"
-            >
-              LOGIN
-            </Link>
-          </li>: <li className="md:ml-8 text-xl md:my-0 my-7">
-            <div
-              className="text-gray-800 hover:text-gray-400 duration-500 cursor-pointer"
-              onClick={logout}
-            >
-              LOGOUT
-            </div>
-          </li>}
+          {!isLogin ? (
+            <li className="md:ml-8 text-xl md:my-0 my-7">
+              <Link
+                to={"/login"}
+                className="text-gray-800 hover:text-gray-400 duration-500"
+              >
+                LOGIN
+              </Link>
+            </li>
+          ) : (
+            <li className="md:ml-8 text-xl md:my-0 my-7">
+              <div
+                className="text-gray-800 hover:text-gray-400 duration-500 cursor-pointer"
+                onClick={logout}
+              >
+                LOGOUT
+              </div>
+            </li>
+          )}
         </ul>
       </div>
     </div>

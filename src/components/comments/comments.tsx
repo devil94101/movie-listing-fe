@@ -4,12 +4,12 @@ import { AxiosInstance } from "../../utils/networkWrapper";
 import { jwtDecode } from "jwt-decode";
 import Toast, { showToast } from "../../common/toastr/toastr";
 import Loader from "../../common/loader/loader";
-import {v4} from 'uuid'
+import { v4 } from "uuid";
 
 const Comments = ({
   movieId,
   commentsData,
-  setComments
+  setComments,
 }: {
   movieId: string;
   commentsData: {
@@ -40,6 +40,11 @@ const Comments = ({
 
   const addComment = () => {
     const token = localStorage.getItem("token");
+    console.log(token)
+    if (!token) {
+      showToast.error("Please login to comment on movies!");
+      return
+    }
     const decodedToken: any = jwtDecode(token || "");
     if (decodedToken.email) {
       setLoading(true);
@@ -51,16 +56,18 @@ const Comments = ({
         movieId,
       })
         .then((res) => {
-          let newComments = [{
-            comment: newComment,
-            email: decodedToken.email,
-            userId: decodedToken.uid,
-            createdAt: new Date().getTime(),
-            id: v4()
-          },...commentsData]
-          setComments(newComments)
+          let newComments = [
+            {
+              comment: newComment,
+              email: decodedToken.email,
+              userId: decodedToken.uid,
+              createdAt: new Date().getTime(),
+              id: v4(),
+            },
+            ...commentsData,
+          ];
+          setComments(newComments);
           showToast.success("Comment added successfully!");
-
         })
         .catch((err) => {
           console.log(err);

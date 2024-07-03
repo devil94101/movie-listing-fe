@@ -18,6 +18,8 @@ function App() {
   const {role,isLogin} = useAppSelector(state=>state.rootState)
   const dispatch = useAppDispatch()
 
+  const [routes, setRoutes] = useState<{name:string; link: string}[]>([])
+
   useEffect(() => {
     if(isLogin && role !== 'admin') {
       AxiosInstance.get('/favourites').then(res=>{
@@ -28,10 +30,20 @@ function App() {
     }
   },[role,isLogin])
 
+  useEffect(()=>{
+    if(isLogin ) {
+      if(role === 'admin') {
+        setRoutes([{ name: "HOME", link: "/" }, {name: "ADD MOVIE", link: '/add-movie'}])
+      } else {
+        setRoutes([{ name: "HOME", link: "/" }, {name: "FAVOURITES", link: '/favourites'}])
+      }
+    }
+  },[isLogin])
+
 
   if (role === 'admin') {
     return (
-      <AdminLayout routes={[{ name: "HOME", link: "/" }, {name: "ADD MOVIE", link: '/add-movie'}]}>
+      <AdminLayout routes={routes}>
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/add-movie" element={<AddMovieForm />} />
@@ -43,7 +55,7 @@ function App() {
   }
 
   return (
-    <Layout routes={[{ name: "HOME", link: "/" }, {name: "FAVOURITES", link: '/favourites'}]}>
+    <Layout routes={routes}>
       <Routes>
         <Route path="/" element={<MovieList />} />
         <Route path="/favourites" element={<FavMovieList />} />

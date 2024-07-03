@@ -37,8 +37,7 @@ const refreshAuthToken = () => {
 
 export const headerParams = (default_headers: any = {}) => {
 	const headers = default_headers
-	headers["Content-Type"] = "application/json"
-	headers["accept"] = "application/json"
+	
 	const token: string = localStorage.getItem("token") || ""
 	if (token) {
 		headers["Authorization"] = `${token}`
@@ -67,8 +66,7 @@ export const interceptor = () => {
 		},
 		async (error) => {
 			const originalRequest = error.config
-			console.log(originalRequest,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-
+			
 			if (error?.response?.status === 401 && !retry && !isRefreshing && retries < 3) {
 				retries++;
 				isRefreshing = true
